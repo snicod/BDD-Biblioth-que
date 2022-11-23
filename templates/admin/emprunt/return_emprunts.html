@@ -1,0 +1,59 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+
+    <div class="row">
+        adhérent : <strong>{{ donneesAdherents.nomAdherent }}</strong>
+        <form method="get" action="/admin/emprunt/adherent-select">
+            <input type="hidden" name="action" value="rendre">
+            <input type="submit" name="changeAdherent" value="changer d'adherent"  style="width: 200px" />
+        </form>
+        <br>
+        nombre d'emprunt(s) :{{ nbrEmprunts.nbrEmprunt }}
+        <br>
+        <fieldset>
+                <table border="2">
+                <caption>Recapitulatifs des Emprunts</caption>
+                {% if donneesEmprunt is defined %}
+                    <thead>
+                    <tr><th>titre</th><th>date emprunt</th><th>nb. Jours</th>
+                        <th>Exemplaires</th><th>date rendu</th><th>Rendre</th></tr>
+                    </thead>
+                    <tbody>
+                    {% for value in donneesEmprunt %}
+                        <tr><td>
+                                {{ value.titre }}
+                            </td><td>
+                                {{ value.date_emprunt }}
+                            </td>
+                            </td><td>
+                                {{ value.nbJoursEmprunt }}
+                            </td>
+                            </td><td>
+                                {{ value.noExemplaire }}
+                            </td>
+                            <form method="post" action="/admin/emprunt/rendre">
+                                <td>
+                                    <input name="dateRetour"  type="text"  size="18" value="{{ donnees.dateRetour }}"/>
+                                </td>
+                                <td>
+                                    <input type="hidden" name="noExemplaire" value="{{ value.noExemplaire }}">
+                                    <input type="hidden" name="dateEmprunt" value="{{ value.date_emprunt }}">
+                                    <input type="hidden" name="idAdherent" value="{{ value.idAdherent }}">
+                                    <input type="submit" name="rendreLivre" value="rendre">
+                                </td>
+                            </form>
+                        </tr>
+                    {% endfor %}
+                    <tbody>
+                    </table>
+                {% else %}
+                    <tr>
+                        <td> pas d'Emprunt</td>
+                    </tr>
+                {% endif %}
+        </fieldset>
+    <a href="/">quitter</a>
+    </div>
+
+{% endblock %}

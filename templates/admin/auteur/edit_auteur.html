@@ -1,0 +1,24 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+    <div class="row ">
+        <form method="post" action="/admin/auteur/edit">
+            <fieldset>
+                <legend>Modifier un Auteur</legend>
+                <input name="id"  type="hidden" value="{{ donnees.id }}"/>
+
+                <label>Nom
+                    <input name="nom"  type="text"  size="18" value="{{ donnees.nom }}"/>
+                </label>
+                {% if erreurs.nom is defined %}
+                    <small class="error">{{erreurs.nom}}</small>
+                {% endif %}
+
+                <label>Prénom</label>
+                <input name="prenom"  type="text"  size="18" value="{{ donnees.prenom }}"/>
+
+                <input type="submit" name="validerForm" value="valider" />
+            </fieldset>
+        </form>
+    </div>
+
+{% endblock %}

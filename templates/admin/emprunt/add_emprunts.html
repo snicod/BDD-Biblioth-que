@@ -1,0 +1,89 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+
+    <div class="row">
+
+        adhérent : <strong>{{ donneesAdherent.nomAdherent }}</strong>
+        <form method="get" action="/admin/emprunt/adherent-select">
+            <input type="hidden" name="action" value="emprunter">
+            <input type="submit" name="changeAdherent" value="changer d'adherent"  style="width: 200px" />
+        </form>
+        <br>
+        nombre d'emprunt(s) :{{ nbrEmprunts.nbrEmprunt }}
+        <br>
+
+
+        <form method="post" action="/admin/emprunt/emprunter">
+            <fieldset>
+                <legend>Emprunter des livres</legend>
+
+                adhérent : <strong>{{ donneesAdherent.nom }}</strong>
+                <br>
+                <!-- champ caché avec l'id pour conserver la valeur de l'id lors de la validation !-->
+                <input name="idAdherent"  type="hidden"  size="18" value="{{ donneesAdherent.id }}"/>
+
+                {% if nbrEmprunts.nbrEmprunt < 5 %}
+                    <label>Exemplaire d'une Oeuvre :
+                        {% if donneesEmprunt is defined %}
+                            <select name="noExemplaire">
+                                {% for dataExemplaire in listeExempDispo %}
+                                    <option value="{{ dataExemplaire.noExemplaire }}"  >
+                                        {{ dataExemplaire.noExemplaire ~ "-" ~ dataExemplaire.titre ~ "-" ~ dataExemplaire.nomAuteur }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                    </label>
+                    <label>date Emprunt</label>
+                    <input name="dateEmprunt"  type="text"  size="18" value="{{ donnees.dateEmprunt }}"/>
+
+
+                    {% if erreurs.dateEmprunt is defined %}
+                        <small class="error">{{erreurs.dateEmprunt}}</small>
+                    {% endif %}
+
+                    <input type="submit" name="AjouterEmprunt" value="Ajouter" />
+                {% else %}
+                    <span class="alert alert-danger">Le nombre d'emprunts maximum est de 5</span>
+                {% endif %}
+            </fieldset>
+        </form>
+
+
+        <table border="2">
+            <caption>Recapitulatifs des Emprunts</caption>
+            <thead>
+            <tr><th>titre</th><th>date emprunt</th><th>nb. Jours</th>
+                <th>Exemplaires</th></tr>
+            </thead>
+            <tbody>
+            {% if donneesEmprunt is defined %}
+            {% for value in donneesEmprunt %}
+            <tr><td>
+                    {{ value.titre }}
+                </td><td>
+                    {{ value.date_emprunt }}
+                </td>
+                </td><td>
+                    {{ value.nbJoursEmprunt }}
+                </td>
+                </td><td>
+                    {{ value.noExemplaire }}
+                </td>
+
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td> pas d'Emprunt</td>
+            </tr>
+            {% endif %}
+            <tbody>
+        </table>
+        <?php endif; ?>
+
+        <a href="/">quitter</a>
+    </div>
+
+{% endblock %}

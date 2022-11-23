@@ -1,0 +1,44 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+    <div class="row" >
+        <a href="/admin/adherent/add"> Ajouter un Adherent </a>
+        <table border="2">
+            <caption>Recapitulatif des Adherents</caption>
+            <thead>
+            <tr><th>nom</th><th>adresse</th><th>date de Paiement</th><th>information(s)</th> <th>opérations</th></tr>
+            </thead>
+            <tbody>
+            {%  if adherents| length >= 1 %}
+                {% for adherent in adherents %}
+                    <tr><td>
+                            {{ adherent.nom }}
+                        </td><td>
+                            {{ adherent.adresse }}
+                        </td><td>
+                            {{ adherent.datePaiement.strftime('%d-%m-%Y')  }}
+                        </td>
+                        <td>
+                            {%  if adherent.nbrEmprunt>0 %}{{  adherent.nbrEmprunt }} emprunt(s) en cours<br>{% endif %}
+                            {%  if adherent.nbrEmprunt>0 and adherent.retard==1 %} <strong style="background-color:red">⚠</strong> <br>{% endif %}
+                            {%  if adherent.retard==1 %}
+                                <span style="color:red">paiement en retard depuis : {{ adherent.datePaiementFutur.strftime('%d-%m-%Y')}}</span><br>
+                            {% elif  adherent.retardProche==1 %}
+                                <span style="color:green">paiement à renouveler</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="/admin/adherent/edit?id={{adherent.id}}">modifier</a>
+                            <a href="/admin/adherent/delete?id={{adherent.id}}">supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td> pas d'adherent dans la base de données</td>
+                </tr>
+            {% endif %}
+            <tbody>
+        </table>
+    </div>
+{% endblock %}

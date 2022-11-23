@@ -1,0 +1,45 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+
+    <div class="row">
+        <form method="post" action="/admin/exemplaire/edit">
+            <fieldset>
+                <!-- champ caché avec l'id pour conserver la valeur de l'id lors de la validation !-->
+                <input name="noExemplaire"  type="hidden" value="{{ donnees.id_exemplaire }}"/>
+                <input name="noOeuvre"  type="hidden" value="{{ donnees.noOeuvre }}"/>
+
+                <legend>modifier un Exemplaire d'une Oeuvre</legend>
+                <h3>Titre: <strong style='color: brown'> {{ donnees2.titre }} </strong>, Auteur :<strong style='color: blueviolet'> {{ donnees2.nomAuteur }}</strong></h3>
+                <label>Etat</label>
+                <!--            <input name="etat"  type="text"  size="18" value="NEUF"/>'BON','MOYEN','MAUVAIS','NEUF'<br>-->
+
+                <input type="radio" name="etat" value="NEUF" {% if donnees.etat == 'NEUF' %} checked {% endif %}>  NEUF -
+                <input type="radio" name="etat" value="BON"   {% if donnees.etat == 'BON' %} checked {% endif %}> BON -
+                <input type="radio" name="etat" value="MOYEN"  {% if donnees.etat == 'MOYEN' %} checked {% endif %}> MOYEN -
+                <input type="radio" name="etat" value="MAUVAIS" {% if donnees.etat == 'MAUVAIS' %} checked {% endif %}> MAUVAIS <br>
+
+                <label>Date Achat </label>
+                <input name="dateAchat"  type="text"  size="18" value="{{ donnees.dateAchat }}">
+                {% if erreurs.dateAchat is defined %}
+                    <small class="error">{{erreurs.dateAchat}}</small>
+                {% endif %}
+
+                <label>Prix </label>
+                <input name="prix"  type="text"  size="18" value="{{ donnees.prix }}"/>
+
+                {% if erreurs.prix is defined %}
+                    <small class="error">{{erreurs.prix}}</small>
+                {% endif %}
+
+                <!-- champ caché avec l'id pour conserver la valeur de l'id lors de la validation !-->
+
+
+                <input type="submit" name="ModifierExemplaire" value="Modifier" />
+
+            </fieldset>
+        </form>
+    </div>
+
+
+{% endblock %}
